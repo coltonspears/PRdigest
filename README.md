@@ -4,6 +4,8 @@ Render any GitHub pull request as a single, LLM-ready markdown document.
 
 Replace `github.com` with your prdigest host on any PR URL — get the PR description, linked issues, the full diff with review comments threaded inline next to the lines they target, review state, and CI results. No AI summarization. Lossless.
 
+![prdigest landing page](docs/screenshot.png)
+
 ## Install
 
 ```pwsh
