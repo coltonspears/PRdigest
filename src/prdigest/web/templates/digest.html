@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ owner }}/{{ repo }}#{{ number }} — prdigest{% endblock %}
+{% block content %}
+<p class="muted">
+  <a href="https://github.com/{{ owner }}/{{ repo }}/pull/{{ number }}" target="_blank" rel="noopener">
+    {{ owner }}/{{ repo }}#{{ number }} on GitHub →
+  </a>
+</p>
+
+{% if error %}
+  <div class="error">{{ error }}</div>
+{% else %}
+  <div class="toolbar">
+    <button class="copy" type="button" onclick="copyMarkdown()">Copy markdown</button>
+    <a href="/api/digest/{{ owner }}/{{ repo }}/{{ number }}" class="muted">raw</a>
+  </div>
+  <pre id="md">{{ markdown }}</pre>
+  <script>
+    function copyMarkdown() {
+      const txt = document.getElementById("md").innerText;
+      navigator.clipboard.writeText(txt).then(() => {
+        const btn = document.querySelector("button.copy");
+        const orig = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => { btn.textContent = orig; }, 1200);
+      });
+    }
+  </script>
+{% endif %}
+{% endblock %}
