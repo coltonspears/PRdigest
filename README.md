@@ -2,7 +2,7 @@
 
 Render any GitHub pull request as a single, LLM-ready markdown document.
 
-Replace `github.com` with your prdigest host on any PR URL — get the PR description, linked issues, the full diff with review comments threaded inline next to the lines they target, review state, and CI results. No AI summarization. Lossless.
+Replace `github.com` with your prdigest host on a PR URL to collect the PR description, linked issues, diff patches, inline review comments, review state, and CI results. The output contains source material for review; it does not generate an AI summary.
 
 ![prdigest landing page](docs/screenshot.png)
 
@@ -40,11 +40,28 @@ md = asyncio.run(build_digest("octocat/Hello-World#1"))
 
 ## Auth
 
-Public PRs work without a token (60 req/hr anonymous limit). For private PRs or higher rate limits, set `GITHUB_TOKEN`:
+Set `GITHUB_TOKEN` before running the CLI, web app, or library. The client uses
+GitHub's GraphQL API for PR metadata, so authentication is required for public
+repositories as well as private ones.
+
+If you already use the GitHub CLI, reuse its active login in the current
+PowerShell session:
 
 ```pwsh
-$env:GITHUB_TOKEN = "ghp_..."
+$env:GITHUB_TOKEN = gh auth token
 ```
+
+For another environment, provide a token through its environment-variable or
+secret-management mechanism. Private repositories must be accessible to that
+token. Keep tokens out of source files and generated digests.
+
+## Current limits
+
+This version fetches up to 100 review threads, 50 comments per thread, 100
+conversation comments, 50 reviews, 20 linked issues, and 50 checks. File patches
+are paginated up to GitHub's 3,000-file limit; binary or oversized changes may
+not include a patch. Use GitHub itself when a complete audit of a large PR is
+required.
 
 ## Layout
 
